@@ -1,11 +1,18 @@
 package com.c1ph3rj.simplelogin
 
-import android.graphics.drawable.Drawable
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.drawable.AnimationDrawable
+import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import androidx.appcompat.content.res.AppCompatResources
+import android.view.View
+import android.view.Window
+import android.view.WindowInsets
+import android.view.WindowManager
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.c1ph3rj.simplelogin.databinding.ActivityLoginScreenBinding
+
 
 class LoginScreen : AppCompatActivity() {
     private lateinit var viewBindLogin : ActivityLoginScreenBinding
@@ -19,8 +26,13 @@ class LoginScreen : AppCompatActivity() {
 
     private fun init(){
         try{
-            val listOfLoginPic = listOf(R.drawable.login_pic_one, R.drawable.login_pic_two, R.drawable.login_pic_three, R.drawable.login_pic_four)
-
+            val userNameField = viewBindLogin.userNameField
+            val userNameLayout = viewBindLogin.userNameLayout
+            val passwordLayout = viewBindLogin.passwordLayout
+            val passwordField = viewBindLogin.passwordField
+            val forgetPassword = viewBindLogin.forgetPassword
+            val signInBtn = viewBindLogin.signInBtn
+            val signInWithGoogleBtn = viewBindLogin.signInWithGoogleBtn
         }catch (e: Exception){
             e.printStackTrace()
         }

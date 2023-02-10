@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:textSize="60sp"
         android:text="Not Found"
+        android:textColor="@color/teal_700"
         android:gravity="center"
         android:paddingBottom="50dp"
         android:layout_marginEnd="20dp"

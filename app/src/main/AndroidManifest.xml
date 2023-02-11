@@ -13,8 +13,24 @@
         android:theme="@style/Theme.SimpleLogin"
         tools:targetApi="31">
         <activity
-            android:name=".RegisterScreen"
+            android:name=".ForgetPasswordScreen"
+            android:exported="false"
+            android:theme="@style/Theme.SimpleLogin.Transparent">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".LandingScreen"
             android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".RegisterScreen"
+            android:exported="false"
+            android:theme="@style/Theme.SimpleLogin.Transparent">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -28,7 +44,8 @@
         </activity>
         <activity
             android:name=".LoginScreen"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/Theme.SimpleLogin.Transparent">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

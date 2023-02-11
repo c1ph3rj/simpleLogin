@@ -25,4 +25,12 @@
             true
         </item>
     </style>
+
+
+    <style name="Theme.SimpleLogin.Transparent" parent="Theme.SimpleLogin">
+        <!-- Style for the second activity -->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
 </resources>

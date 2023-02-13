@@ -14,6 +14,8 @@ import com.c1ph3rj.simplelogin.databinding.ActivityLoginScreenBinding
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -105,7 +107,7 @@ class LoginScreen : AppCompatActivity() {
                     imm.hideSoftInputFromWindow(viewBindLogin.root.windowToken, 0)
                     userNameField.clearFocus()
                     passwordField.clearFocus()
-                    signUpWithGoogle()
+                    signInWithGoogle()
                 }
 
                 signInBtn.setOnClickListener(){
@@ -177,13 +179,15 @@ class LoginScreen : AppCompatActivity() {
 
     }
 
-    private fun signUpWithGoogle(){
+    private fun signInWithGoogle(){
         try{
-            // Create and launch sign-in intent
-            val signInIntent = AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .build()
+            val googleSignInOptions =
+                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken("110262489068270042125")
+                    .requestEmail()
+                    .build()
+            val googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
+            val signInIntent: Intent = googleSignInClient.signInIntent
             signInLauncher.launch(signInIntent)
         }catch(e: Exception){
             e.printStackTrace()
@@ -222,9 +226,6 @@ class LoginScreen : AppCompatActivity() {
     ) { res ->
         this.onSignInResult(res)
     }
-
-    private val providers = arrayListOf(
-        AuthUI.IdpConfig.GoogleBuilder().build())
 
     private fun startRevealActivity(v: View, intent:Intent) {
         //calculates the center of the View v you are passing

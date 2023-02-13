@@ -31,7 +31,7 @@ class AppLoadingScreen : AppCompatActivity() {
                         if (firebaseAuth.currentUser == null)
                             startActivity(Intent(this, LandingScreen::class.java))
                         else startActivity(Intent(this, DashboardScreen::class.java))
-                    }, 6000
+                    }, 3000
                 )
             } catch (e: Exception) {
                 e.printStackTrace()

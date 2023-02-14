@@ -29,12 +29,17 @@ class HeadlinesFragment(var articles: Articles) : Fragment() {
     }
 
     private fun createHeadlines(){
-        val headlineImg = viewBindHeadlines.headlinesImgView
-        val headlineTitle = viewBindHeadlines.headlinesTitleView
+        try{
+            val headlineImg = viewBindHeadlines.headlinesImgView
+            val headlineTitle = viewBindHeadlines.headlinesTitleView
 
-        Glide.with(this).load(articles.urlToImage).into(headlineImg)
+            headlineTitle.text = articles.title
 
-        headlineTitle.text = articles.title
+            Glide.with(this).load(articles.urlToImage).into(headlineImg)
+
+        }catch(e: Exception){
+            e.printStackTrace()
+        }
     }
 
 }

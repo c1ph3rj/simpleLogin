@@ -10,42 +10,28 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="280dp"
         android:layout_margin="10dp"
         android:id="@+id/topHeadlinesView"/>
 
-    <HorizontalScrollView
-        android:layout_width="180dp"
-        android:scrollbars="none"
-        android:focusable="false"
-        android:clickable="false"
-        android:focusableInTouchMode="false"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content"
-        android:id="@+id/tabIndicatorScroll">
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <com.c1ph3rj.simplelogin.BubblePageIndicatorPkg.BubblePageIndicator
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:gravity="center_horizontal"
+            app:bpi_fillColor="@color/teal_700"
+            app:bpi_pageColor="@color/lightGrey"
+            app:bpi_radius="4dp"
+            app:bpi_marginBetweenCircles="6dp"
+            app:bpi_onSurfaceCount="3"
+            app:bpi_risingCount="2"
+            android:id="@+id/dotIndicator"/>
+    </LinearLayout>
 
-            <com.google.android.material.tabs.TabLayout
-                android:layout_width="wrap_content"
-                android:layout_height="10dp"
-                android:layout_margin="10dp"
-                app:tabMaxWidth="200dp"
-                app:tabIndicatorAnimationMode="elastic"
-                app:tabIndicatorGravity="center"
-                android:layout_gravity="center"
-                app:tabBackground="@drawable/tab_selector"
-                android:backgroundTint="@color/white"
-                app:tabGravity="center"
-                app:tabIndicatorHeight="0dp"
-                android:id="@+id/headlinesViewIndicator"/>
-
-        </LinearLayout>
-
-    </HorizontalScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"

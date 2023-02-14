@@ -3,13 +3,13 @@ package com.c1ph3rj.simplelogin
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import android.view.View.OnTouchListener
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.c1ph3rj.simplelogin.databinding.ActivityDashboardScreenBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -52,58 +52,19 @@ class DashboardScreen : AppCompatActivity() {
                             ) {
                                 println(response)
                                 if (response.isSuccessful) {
-                                    val indicatorScrollView = viewBindDashBoard.tabIndicatorScroll
-                                    indicatorScrollView.setOnTouchListener { _, _ ->
-                                        true
-                                    }
                                     val responseFromApi: NEWSResponse? = response.body()
                                     if (responseFromApi != null) {
                                         val headlinesViewAdapter = topHeadlinesViewAdapter(
                                             this@DashboardScreen,
                                             responseFromApi.articles
                                         )
-                                        val tabDotsForHeadlinesView =
-                                            viewBindDashBoard.headlinesViewIndicator
 
                                         topHeadlinesView.adapter = headlinesViewAdapter
 
-                                        TabLayoutMediator(
-                                            tabDotsForHeadlinesView, topHeadlinesView
-                                        ) { _: TabLayout.Tab?, _: Int -> }.attach()
+                                        val pageIndicator = viewBindDashBoard.dotIndicator
 
-                                        topHeadlinesView.registerOnPageChangeCallback(object :
-                                            ViewPager2.OnPageChangeCallback() {
-                                            override fun onPageScrolled(
-                                                position: Int,
-                                                positionOffset: Float,
-                                                positionOffsetPixels: Int
-                                            ) {
-                                                super.onPageScrolled(
-                                                    position,
-                                                    positionOffset,
-                                                    positionOffsetPixels
-                                                )
+                                        pageIndicator.setViewPager(topHeadlinesView)
 
-                                                if(!topHeadlinesView.isFakeDragging){
-                                                    val scrollPosition = position - 5
-                                                    if(scrollPosition >= 0){
-                                                        indicatorScrollView.scrollX =
-                                                            tabDotsForHeadlinesView.getTabAt(scrollPosition)!!.view.x.toInt()
-                                                    }
-
-
-                                                    if(scrollPosition > 0){
-                                                        tabDotsForHeadlinesView.getTabAt(scrollPosition)!!.view.scaleX = -0.5F
-                                                        tabDotsForHeadlinesView.getTabAt(scrollPosition)!!.view.scaleY = -0.5F
-                                                    }
-
-                                                    println(scrollPosition)
-                                                }
-
-
-
-                                            }
-                                        })
 
                                     }
                                 }

@@ -10,19 +10,42 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="300dp"
         android:layout_margin="10dp"
         android:id="@+id/topHeadlinesView"/>
 
-    <com.google.android.material.tabs.TabLayout
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_margin="10dp"
-        app:tabBackground="@drawable/tab_selector"
-        android:backgroundTint="@color/white"
-        app:tabGravity="center"
-        app:tabIndicatorHeight="0dp"
-        android:id="@+id/headlinesViewIndicator"/>
+    <HorizontalScrollView
+        android:layout_width="180dp"
+        android:scrollbars="none"
+        android:focusable="false"
+        android:clickable="false"
+        android:focusableInTouchMode="false"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:id="@+id/tabIndicatorScroll">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.tabs.TabLayout
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:layout_margin="10dp"
+                app:tabMaxWidth="200dp"
+                app:tabIndicatorAnimationMode="elastic"
+                app:tabIndicatorGravity="center"
+                android:layout_gravity="center"
+                app:tabBackground="@drawable/tab_selector"
+                android:backgroundTint="@color/white"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"
+                android:id="@+id/headlinesViewIndicator"/>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"

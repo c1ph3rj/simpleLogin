@@ -1,25 +1,30 @@
 package com.c1ph3rj.simplelogin
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.c1ph3rj.simplelogin.databinding.ActivityLoginScreenBinding
-import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
-import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
+import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 
 class LoginScreen : AppCompatActivity() {
@@ -174,6 +179,11 @@ class LoginScreen : AppCompatActivity() {
                 startRevealActivity(viewBindLogin.root, Intent(this@LoginScreen, DashboardScreen::class.java))
             }.addOnFailureListener(this@LoginScreen){
                 it.printStackTrace()
+                if(it.message?.contains("password") == true){
+                    passwordLayout.error = "Incorrect Password!"
+                }else if(it.message?.contains("user") == true){
+                    userNameLayout.error = "No User Found!"
+                }
                 Toast.makeText(this@LoginScreen, it.message , Toast.LENGTH_SHORT).show()
             }
 
@@ -186,7 +196,9 @@ class LoginScreen : AppCompatActivity() {
                     .requestIdToken("110262489068270042125")
                     .requestEmail()
                     .build()
+
             val googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
+            googleSignInClient.signOut()
             val signInIntent: Intent = googleSignInClient.signInIntent
             signInLauncher.launch(signInIntent)
         }catch(e: Exception){
@@ -194,38 +206,86 @@ class LoginScreen : AppCompatActivity() {
         }
     }
 
-    private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
-        val response = result.idpResponse
-        println(response)
-        if (result.resultCode == RESULT_OK) {
-            // Successfully signed in
-            val user = FirebaseAuth.getInstance().currentUser
-            val userDetails = getSharedPreferences("UserDetailsPref", Context.MODE_PRIVATE)
-            val userDetailsEditor = userDetails.edit()
-            userDetailsEditor.putString("e_mail", user?.email)
-            userDetailsEditor.putString("uid", user?.uid)
-            userDetailsEditor.putString("displayName", user?.displayName)
-            userDetailsEditor.putString("photo", user?.photoUrl.toString())
-            userDetailsEditor.putString("providerId", user?.providerId)
-            userDetailsEditor.putString("phoneNumber", user?.phoneNumber)
-            response?.isNewUser?.let { userDetailsEditor.putBoolean("isNewUser", it) }
-            userDetailsEditor.apply()
-            startRevealActivity(viewBindLogin.root, Intent(this@LoginScreen, DashboardScreen::class.java))
-        } else {
-            // Sign in failed. If response is null the user canceled the
-            // sign-in flow using the back button. Otherwise check
-            // response.getError().getErrorCode() and handle the error.
-            // ...
-            Toast.makeText(this@LoginScreen, response?.error?.message, Toast.LENGTH_SHORT).show()
+    private fun handleSignInResult(result: GoogleSignInResult) {
+        try{
+            if (result.isSuccess) {
+                try{
+                    val account = result.signInAccount
+                    val idToken = account!!.idToken
+                    // you can store user data to SharedPreference
+                    val credential = GoogleAuthProvider.getCredential(idToken, null)
+                    firebaseAuthWithGoogle(credential)
+                }catch(e: Exception){
+                    e.printStackTrace()
+                }
+            } else {
+                try{
+                    // Google Sign In failed, update UI appropriately
+                    Log.e(TAG, "Login Unsuccessful. $result")
+                    Toast.makeText(this, "Login Unsuccessful", Toast.LENGTH_SHORT).show()
+                }catch(e: Exception){
+                    e.printStackTrace()
+                }
+            }
+        }catch(e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(credential: AuthCredential) {
+        try{
+            firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(
+                    this
+                ) { task ->
+                    Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful)
+                    if (task.isSuccessful) {
+                        try{
+                            val user = task.result.user
+                            val userDetails = getSharedPreferences("UserDetailsPref", Context.MODE_PRIVATE)
+                            val userDetailsEditor = userDetails.edit()
+                            userDetailsEditor.putString("e_mail", user?.email)
+                            userDetailsEditor.putString("uid", user?.uid)
+                            userDetailsEditor.putString("displayName", user?.displayName)
+                            userDetailsEditor.putString("photo", user?.photoUrl.toString())
+                            userDetailsEditor.putString("providerId", user?.providerId)
+                            userDetailsEditor.putString("phoneNumber", user?.phoneNumber)
+                            userDetailsEditor.apply()
+                            startRevealActivity(viewBindLogin.root, Intent(this@LoginScreen, DashboardScreen::class.java))
+                        }catch(e: Exception){
+                            e.printStackTrace()
+                        }
+                    } else {
+                        try{
+                            Log.w(TAG, "signInWithCredential" + task.exception?.message)
+                            task.exception?.printStackTrace()
+                            Toast.makeText(
+                                this@LoginScreen, "Authentication failed.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }catch(e: Exception){
+                            e.printStackTrace()
+                        }
+                    }
+                }
+        }catch(e: Exception){
+            e.printStackTrace()
         }
     }
 
 
     private val signInLauncher = registerForActivityResult(
-        FirebaseAuthUIActivityResultContract()
-    ) { res ->
-        this.onSignInResult(res)
-    }
+    ActivityResultContracts.StartActivityForResult()){
+        result : ActivityResult->
+        try{
+            if(result.resultCode == RESULT_OK){
+                val output = result.data?.let { Auth.GoogleSignInApi.getSignInResultFromIntent(it) }
+                handleSignInResult(output!!)
+            }
+        }catch(e: Exception){
+            e.printStackTrace()
+        }
+}
 
     private fun startRevealActivity(v: View, intent:Intent) {
         //calculates the center of the View v you are passing

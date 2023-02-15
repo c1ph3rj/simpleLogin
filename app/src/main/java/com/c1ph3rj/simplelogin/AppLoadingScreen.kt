@@ -7,10 +7,12 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.c1ph3rj.simplelogin.databinding.ActivityAppLoadingScreenBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.FirebaseAuth
 
 class AppLoadingScreen : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var googleSignIn: GoogleSignIn
     private lateinit var viewBindLoadingScreen: ActivityAppLoadingScreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

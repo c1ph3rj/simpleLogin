@@ -153,6 +153,7 @@ class RegisterScreen : AppCompatActivity() {
                     .requestEmail()
                     .build()
             val googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
+            googleSignInClient.signOut()
             val signInIntent: Intent = googleSignInClient.signInIntent
             signInLauncher.launch(signInIntent)
         }catch(e: Exception){

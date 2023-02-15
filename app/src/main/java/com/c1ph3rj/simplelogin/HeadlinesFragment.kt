@@ -35,7 +35,7 @@ class HeadlinesFragment(var articles: Articles) : Fragment() {
 
             headlineTitle.text = articles.title
 
-            Glide.with(this).load(articles.urlToImage).into(headlineImg)
+            Glide.with(this).load(articles.urlToImage).error(R.drawable.not_found_img).into(headlineImg)
 
         }catch(e: Exception){
             e.printStackTrace()

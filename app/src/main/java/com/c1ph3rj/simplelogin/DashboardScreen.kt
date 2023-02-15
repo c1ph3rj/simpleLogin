@@ -2,25 +2,16 @@ package com.c1ph3rj.simplelogin
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.c1ph3rj.simplelogin.databinding.ActivityDashboardScreenBinding
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.math.abs
 
 
 class DashboardScreen : AppCompatActivity() {
-    private final val ApiKey: String = "17e09070dd3c40efa6739f5e23d57aa3"
     private lateinit var viewBindDashBoard: ActivityDashboardScreenBinding
+    private lateinit var topHeadlinesView: ViewPager2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +23,21 @@ class DashboardScreen : AppCompatActivity() {
 
     private fun init() {
         try {
-            val topHeadlinesView = viewBindDashBoard.topHeadlinesView
+            topHeadlinesView = viewBindDashBoard.topHeadlinesView
 
+            try {
+                getTopTechHeadLines()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+    private fun getTopTechHeadLines() {
+        try {
             Thread {
                 try {
                     val retrofit = Retrofit.Builder()
@@ -43,7 +47,7 @@ class DashboardScreen : AppCompatActivity() {
 
                     val apiCall = retrofit.create<NEWSRequestApi>()
 
-                    apiCall.getTopTechNews("technology", "en", ApiKey)
+                    apiCall.getTopTechNews("technology", "en", getString(R.string.NEWS_API_KEY))
                         .enqueue(object : Callback<NEWSResponse?> {
                             @SuppressLint("ClickableViewAccessibility")
                             override fun onResponse(
@@ -53,20 +57,23 @@ class DashboardScreen : AppCompatActivity() {
                                 println(response)
                                 if (response.isSuccessful) {
                                     val responseFromApi: NEWSResponse? = response.body()
-                                    if (responseFromApi != null) {
-                                        val headlinesViewAdapter = topHeadlinesViewAdapter(
-                                            this@DashboardScreen,
-                                            responseFromApi.articles
-                                        )
+                                    if (response.code() == 200) {
+                                        try {
+                                            if (responseFromApi != null) {
+                                                val headlinesViewAdapter = TopHeadlinesViewAdapter(
+                                                    this@DashboardScreen,
+                                                    responseFromApi.articles
+                                                )
+                                                topHeadlinesView.adapter = headlinesViewAdapter
+                                                val pageIndicator = viewBindDashBoard.dotIndicator
+                                                pageIndicator.setViewPager(topHeadlinesView)
 
-                                        topHeadlinesView.adapter = headlinesViewAdapter
-
-                                        val pageIndicator = viewBindDashBoard.dotIndicator
-
-                                        pageIndicator.setViewPager(topHeadlinesView)
-
-
+                                            }
+                                        } catch (e: Exception) {
+                                            e.printStackTrace()
+                                        }
                                     }
+
                                 }
                             }
 
@@ -81,6 +88,6 @@ class DashboardScreen : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
+
 }

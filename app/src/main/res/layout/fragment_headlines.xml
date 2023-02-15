@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:weightSum="6"
+            android:id="@+id/headlineLayout"
             android:orientation="vertical">
 
             <ImageView
@@ -31,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:text="Title for the News"
                 android:fontFamily="@font/oswald_medium"
-                android:textColor="@color/teal_700"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:padding="10dp"
                 android:id="@+id/headlinesTitleView" />

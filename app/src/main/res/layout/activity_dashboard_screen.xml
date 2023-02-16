@@ -10,35 +10,107 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="140dp">
+        android:layout_height="90dp"
+        android:weightSum="10"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:layout_weight="10"
+            android:paddingEnd="20dp"
+            android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hi User"
+                android:id="@+id/userNameView"
+                android:textColor="@color/teal_700"
+                android:fontFamily="@font/oswald_semibold"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="34°C"
+                android:id="@+id/temperatureView"
+                android:fontFamily="@font/cabin_medium_"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="180dp"
+            app:cardElevation="3dp"
+            android:layout_marginEnd="20dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:id="@+id/profilePicView"/>
+
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 
-    <LinearLayout
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:layout_height="wrap_content">
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:layout_width="match_parent"
-            android:layout_height="240dp"
-            android:id="@+id/topHeadlinesView" />
-
-        <com.c1ph3rj.simplelogin.BubblePageIndicatorPkg.BubblePageIndicator
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            app:bpi_fillColor="@color/teal_700"
-            app:bpi_pageColor="@color/lightGrey"
-            app:bpi_radius="4dp"
-            app:bpi_marginBetweenCircles="6dp"
-            app:bpi_onSurfaceCount="3"
-            app:bpi_risingCount="2"
-            android:id="@+id/dotIndicator" />
-    </LinearLayout>
+            android:orientation="vertical"
+            android:paddingStart="120dp"
+            android:paddingEnd="10dp"
+            android:gravity="center">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_margin="10dp"
+                app:contentPadding="10dp"
+                app:cardElevation="10dp"
+                app:cardCornerRadius="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/techHeadLinesView"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/news_ic"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tech Headlines"
+                        android:fontFamily="@font/oswald_medium"
+                        android:textColor="@color/black"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:gravity="center"/>
+
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
 
 
     <LinearLayout
@@ -49,6 +121,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
 
 
 </LinearLayout>

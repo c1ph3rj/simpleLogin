@@ -12,9 +12,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.c1ph3rj.simplelogin.databinding.FragmentTopHeadlinesBriefViewBinding
+import com.c1ph3rj.simplelogin.newsApi.Articles
 
 
-class TopHeadlinesBriefView : Fragment() {
+class TopHeadlinesBriefView(private var articles: Articles) : Fragment() {
     private lateinit var viewBindBriefView: FragmentTopHeadlinesBriefViewBinding
 
     override fun onCreateView(

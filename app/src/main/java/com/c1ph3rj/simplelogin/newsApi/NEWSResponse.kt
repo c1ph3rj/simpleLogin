@@ -1,4 +1,4 @@
-package com.c1ph3rj.simplelogin
+package com.c1ph3rj.simplelogin.newsApi
 
 import com.google.gson.annotations.SerializedName
 

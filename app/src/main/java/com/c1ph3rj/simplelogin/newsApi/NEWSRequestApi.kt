@@ -1,6 +1,5 @@
-package com.c1ph3rj.simplelogin
+package com.c1ph3rj.simplelogin.newsApi
 
-import org.intellij.lang.annotations.Language
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

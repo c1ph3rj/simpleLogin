@@ -16,18 +16,20 @@ import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var bindMainActivity : ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        init();
+        init()
     }
 
     private fun init(){
         startActivity(Intent(this, AppLoadingScreen::class.java))
     }
 
+    companion object{
+        lateinit var latLng : String
+    }
 
 }

@@ -243,6 +243,7 @@ class DashboardScreen : AppCompatActivity() {
                                 }
                             }
 
+
                             override fun onFailure(call: Call<NEWSResponse?>, t: Throwable) {
                                 t.printStackTrace()
                             }

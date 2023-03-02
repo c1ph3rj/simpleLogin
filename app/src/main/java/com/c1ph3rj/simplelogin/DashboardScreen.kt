@@ -1,17 +1,17 @@
 package com.c1ph3rj.simplelogin
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.location.Geocoder
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +23,7 @@ import com.c1ph3rj.simplelogin.BubblePageIndicatorPkg.BubblePageIndicator
 import com.c1ph3rj.simplelogin.databinding.ActivityDashboardScreenBinding
 import com.c1ph3rj.simplelogin.newsApi.NEWSRequestApi
 import com.c1ph3rj.simplelogin.newsApi.NEWSResponse
-import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
@@ -40,13 +40,18 @@ class DashboardScreen : AppCompatActivity() {
         setContentView(viewBindDashBoard.root)
 
         init()
+
     }
 
     private fun init() {
         try {
             val userNameView = viewBindDashBoard.userNameView
             val profilePicView = viewBindDashBoard.profilePicView
+            val roomDbView = viewBindDashBoard.roomDb
 
+            roomDbView.setOnClickListener(){
+                startActivity(Intent(this@DashboardScreen, RoomDatabaseActivity::class.java))
+            }
             val userDetailsPref = getSharedPreferences("UserDetailsPref", MODE_PRIVATE)
             var userName = userDetailsPref.getString("displayName", "User")
             val profilePicUrl = userDetailsPref.getString("photo", "No Value")
@@ -69,6 +74,7 @@ class DashboardScreen : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
 
     }
 
@@ -139,8 +145,13 @@ class DashboardScreen : AppCompatActivity() {
 
                                                 briefHeadline.create()
                                                 val techHeadlinesView = viewBindDashBoard.techHeadLinesView
+                                                try{
+
                                                 techHeadlinesView.setOnClickListener(){
-                                                    briefHeadline.show()
+                                                    throw Exception()
+                                                }
+                                                }catch(e: Exception){
+                                                    e.printStackTrace()
                                                 }
                                             }
                                         } catch (e: Exception) {
